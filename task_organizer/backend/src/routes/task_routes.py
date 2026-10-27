@@ -3,8 +3,8 @@ from pydantic import ValidationError
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from src import db_session
-from task_organizer.backend.src.models.task import Task
-from task_organizer.backend.src.schemas.task_schemas import (
+from src.models.task import Task
+from src.schemas.task_schemas import (
     TaskCreateRequest, TaskResponse, TaskUpdateRequest
 )
 
@@ -32,6 +32,7 @@ def get_tasks():
         }), 500
 
     except Exception as e:
+        db_session.rollback()
         return jsonify({
             "error": "Internal server error",
             "details": str(e)
@@ -61,6 +62,7 @@ def get_task_by_id(task_id):
         }), 500
 
     except Exception as e:
+        db_session.rollback()
         return jsonify({
             "error": "Internal server error",
             "details": str(e)
@@ -97,6 +99,7 @@ def create_task():
         }), 500
 
     except Exception as e:
+        db_session.rollback()
         return jsonify({
             "error": "Internal server error",
             "details": str(e)
@@ -123,12 +126,9 @@ def update_task(task_id):
         db_session.commit()
         db_session.refresh(task_model)
 
-        result = TaskResponse.model_validate(
-            task_model).model_dump(mode='json')
-
         return jsonify({
             "message": "Task updated successfully!",
-            "task": result
+            "task": task_model
         }), 200
 
     except ValidationError as e:
@@ -145,6 +145,7 @@ def update_task(task_id):
         }), 500
 
     except Exception as e:
+        db_session.rollback()
         return jsonify({
             "error": "Internal server error",
             "details": str(e)
@@ -174,6 +175,7 @@ def delete_task(task_id):
         }), 500
 
     except Exception as e:
+        db_session.rollback()
         return jsonify({
             "error": "Internal server error",
             "details": str(e)

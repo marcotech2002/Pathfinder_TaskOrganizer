@@ -8,6 +8,7 @@ CREATE TABLE "users" (
 CREATE TABLE "categories" (
   "id" integer PRIMARY KEY,
   "name" varchar(150) NOT NULL
+  "user_id" integer NOT NULL,
 );
 
 CREATE TABLE "tasks" (
@@ -23,5 +24,6 @@ CREATE TABLE "tasks" (
   
   -- Chaves estrangeiras declaradas inline (compatível com SQLite e Postgres)
   CONSTRAINT "user_tasks" FOREIGN KEY ("user_id") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE,
+  CONSTRAINT "user_categories" FOREIGN KEY ("user_id") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE,
   CONSTRAINT "task_category" FOREIGN KEY ("category_id") REFERENCES "categories" ("id") DEFERRABLE INITIALLY IMMEDIATE
 );

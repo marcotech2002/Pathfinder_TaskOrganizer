@@ -25,6 +25,10 @@ class User(BaseModel):
         back_populates="user",
         cascade="all, delete-orphan"
     )
+    categories: Mapped[list["Category"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
 
     @hybrid_property
     def password(self) -> str:
