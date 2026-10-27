@@ -10,8 +10,7 @@ class TaskCreateRequest(BaseModel):
     """
     title: str
     description: str
-    completed: bool
-    due_date: datetime
+    due_date: Optional[datetime] = None
     category_id: Optional[int] = None
 
 
@@ -23,6 +22,7 @@ class TaskUpdateRequest(BaseModel):
     description: Optional[str] = None
     completed: Optional[bool] = None
     due_date: Optional[datetime] = None
+    completion_date: Optional[datetime] = None
     category_id: Optional[int] = None
 
 
@@ -36,7 +36,8 @@ class TaskResponse(BaseModel):
     completed: bool
     creation_date: datetime
     update_date: datetime
-    due_date: datetime
+    due_date: Optional[datetime] = None
+    completion_date: Optional[datetime] = None
     category_id: Optional[int] = None
 
     model_config = ConfigDict(from_attributes=True)

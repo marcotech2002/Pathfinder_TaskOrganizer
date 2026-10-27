@@ -46,9 +46,9 @@ def create_user():
         user_dto = UserCreateRequest.model_validate(payload)
         user_model = User(
             name=user_dto.name,
-            username=user_dto.username,
-            password=user_dto.password
+            username=user_dto.username
         )
+        user_model.password = user_dto.password
 
         db_session.add(user_model)
         db_session.commit()

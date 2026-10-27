@@ -14,7 +14,10 @@ task_bp = Blueprint("task_bp", __name__, url_prefix='/tasks')
 @task_bp.route("/", methods=['GET'])
 def get_tasks():
     try:
-        stmt = select(Task)
+        # Test
+        user_id = 1
+
+        stmt = select(Task).filter_by(user_id=user_id)
         tasks = db_session.scalars(stmt).all()
 
         result = [
@@ -42,7 +45,10 @@ def get_tasks():
 @task_bp.route("/<int:task_id>", methods=['GET'])
 def get_task_by_id(task_id):
     try:
-        stmt = select(Task).filter_by(id=task_id)
+        # Test
+        user_id = 1
+
+        stmt = select(Task).filter_by(id=task_id, user_id=user_id)
         task = db_session.scalars(stmt).first()
 
         if not task:
@@ -72,9 +78,14 @@ def get_task_by_id(task_id):
 @task_bp.route("/", methods=['POST'])
 def create_task():
     try:
+        # Test
+        user_id = 1
+
         payload = request.get_json() or {}
         task_dto = TaskCreateRequest.model_validate(payload)
         task_model = Task(**task_dto.model_dump())
+
+        task_model.user_id = user_id
 
         db_session.add(task_model)
         db_session.commit()
@@ -109,7 +120,10 @@ def create_task():
 @task_bp.route("/<int:task_id>", methods=['PATCH'])
 def update_task(task_id):
     try:
-        stmt = select(Task).filter_by(id=task_id)
+        # Test
+        user_id = 1
+
+        stmt = select(Task).filter_by(id=task_id, user_id=user_id)
         task_model = db_session.scalars(stmt).first()
 
         if not task_model:
@@ -155,7 +169,10 @@ def update_task(task_id):
 @task_bp.route("/<int:task_id>", methods=['DELETE'])
 def delete_task(task_id):
     try:
-        stmt = select(Task).filter_by(id=task_id)
+        # Test
+        user_id = 1
+
+        stmt = select(Task).filter_by(id=task_id, user_id=user_id)
         task = db_session.scalars(stmt).first()
 
         if not task:

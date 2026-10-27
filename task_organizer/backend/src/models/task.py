@@ -17,7 +17,10 @@ class Task(BaseModel):
     creation_date: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now(), nullable=False
     )
-    due_date: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    due_date: Mapped[Optional[datetime]] = mapped_column(
+        DateTime)
+    completion_date: Mapped[Optional[datetime]] = mapped_column(
+        DateTime)
     update_date: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now(), onupdate=func.now(),
         nullable=False

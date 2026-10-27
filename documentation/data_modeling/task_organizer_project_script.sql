@@ -16,9 +16,10 @@ CREATE TABLE "tasks" (
   "title" varchar(150) NOT NULL,
   "description" text NOT NULL,
   "creation_date" datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  "due_date" datetime NOT NULL,
+  "due_date" datetime,
   "update_date" datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "completed" boolean NOT NULL DEFAULT 0,
+  "completion_date" datetime,
   "user_id" integer NOT NULL,
   "category_id" integer,
   
