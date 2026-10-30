@@ -1,0 +1,58 @@
+<app-list-header></app-list-header>
+<br>
+<div class="to-filters">
+  <button
+    mat-flat-button
+    [class.to-secondary-button]="!filters[0].isActive"
+    [attr.aria-pressed]="filters[0].isActive">
+    All
+  </button>
+
+  <button
+    mat-flat-button
+    [class.to-secondary-button]="!filters[1].isActive"
+    [attr.aria-pressed]="filters[1].isActive">
+    To do
+  </button>
+
+  <button
+    mat-flat-button
+    [class.to-secondary-button]="!filters[2].isActive"
+    [attr.aria-pressed]="filters[2].isActive">
+    Completed
+  </button>
+
+  <button
+    mat-flat-button
+    [class.to-secondary-button]="!filters[3].isActive"
+    [matMenuTriggerFor]="categories">
+    Categories
+    <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
+  </button>
+</div>
+<br>
+<div class="to-task-list-container">
+  @for (task of pagedTasks; track $index; let l = $last) {
+    <app-task-card [taskSignal]="task" (statusChange)="onStatusChange(task.id!, $event)"></app-task-card>
+    @if (!l) {
+      <br>
+    }
+  }
+</div>
+<br>
+<div class="to-list-control">
+  <span class="to-subtext">{{listInfo}}</span>
+  <mat-paginator [length]="tasks.length"
+                [pageSize]="pageSize"
+                [hidePageSize] = "true"
+                [showFirstLastButtons] = "true"
+                (page)="onPageChange($event)"
+                aria-label="Select page">
+  </mat-paginator>
+</div>
+
+<mat-menu #categories="matMenu">
+  <button mat-menu-item>Item 1</button>
+  <button mat-menu-item>Item 2</button>
+</mat-menu>
+

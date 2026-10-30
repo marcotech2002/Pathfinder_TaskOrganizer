@@ -1,0 +1,24 @@
+.to-header-container {
+  display: grid;
+  grid-template-areas:
+  "title add-button"
+  "sub-title sub-title"
+  ;
+  grid-template-columns: 3fr 1fr;
+
+  .to-title {
+    grid-area: title;
+  }
+
+  .to-sub-title {
+    grid-area: sub-title;
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .to-add-button {
+    grid-area: add-button;
+    justify-self: flex-end;
+    align-self: center;
+  }
+}

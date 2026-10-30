@@ -1,0 +1,37 @@
+.to-toolbar {
+  border-bottom: 1px outset #f7f8faa7;
+
+  .to-title {
+    color: var(--mat-sys-primary);
+  }
+
+  .to-menu {
+    padding-left: 2rem;
+    flex: 1 1 auto;
+
+    a {
+      margin-right: 0.5rem;
+    }
+
+    .to-route-active {
+      background-color: var(--mat-sys-primary);
+      color: var(--mat-sys-on-primary);
+    }
+  }
+
+  .to-extra {
+    display: flex;
+
+    .to-extra__name {
+      font-size: 14px;
+      padding-right: 1rem;
+      align-content: center;
+      overflow: hidden;
+    }
+
+    button {
+      color: var(--mat-sys-primary);
+    }
+  }
+}
+

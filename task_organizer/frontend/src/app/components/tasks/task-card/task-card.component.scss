@@ -1,0 +1,75 @@
+.to-task-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 16px;
+
+  .to-task-card-main {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+
+    button {
+      width: 30px;
+      height: 30px;
+    }
+
+    .to-task-card-info {
+      min-width: 0;
+    }
+
+    .to-task-card-info mat-card-title,
+    .to-task-card-info mat-card-subtitle {
+      display: block;
+    }
+  }
+}
+
+.to-card-support {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3.5rem;
+  margin-left: auto;
+
+  .to-card-support-data,
+  .to-card-support-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .to-card-support-data {
+    font-size: 14px;
+  }
+
+  .to-card-support-data-category {
+    padding: 2px 8px;
+    border-radius: var(--mat-sys-corner-full);
+    background-color: var(--app-secondary);
+    color: var(--app-on-secondary);
+  }
+}
+
+@media (max-width: 700px) {
+  .to-task-card-header,
+  .to-card-support {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .to-card-support {
+    gap: 12px;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .to-card-support-data,
+  .to-card-support-actions {
+    flex-wrap: wrap;
+  }
+}
+
+

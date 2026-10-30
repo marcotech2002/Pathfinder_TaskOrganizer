@@ -1,0 +1,23 @@
+<mat-toolbar class="to-toolbar">
+  <span class="to-title">Personal Organizer</span>
+
+  <div class="to-menu">
+    @for (option of buttons; track option.routeLink && option.label) {
+      <a
+        mat-button
+        [routerLink]="[option.routeLink]"
+        routerLinkActive="to-route-active"
+      >
+      {{option.label}}
+      </a>
+    }
+  </div>
+
+  <div class="to-extra">
+    <span class="to-extra__name">{{name}}</span>
+    <button matTooltip="{{isDark ? 'light mode' : 'dark mode'}}" mat-icon-button (click)="toggleTheme()">
+      <mat-icon>{{isDark ? 'light_mode' : 'nightlight'}}</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+

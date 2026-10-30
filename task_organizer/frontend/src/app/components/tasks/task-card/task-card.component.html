@@ -1,0 +1,41 @@
+<mat-card appearance="outlined">
+  <mat-card-header class="to-task-card-header">
+    <div class="to-task-card-main">
+      <button
+        mat-mini-fab
+        [style]="
+          task.completed
+            ? 'background-color: var(--mat-sys-primary)'
+            : 'background-color: var(--app-surface)'
+        "
+        (click)="changeTaskStatus()"
+      ></button>
+
+      <div class="to-task-card-info">
+        <mat-card-title>{{ task.title }}</mat-card-title>
+        <mat-card-subtitle>{{ task.description }}</mat-card-subtitle>
+      </div>
+    </div>
+
+    <div class="to-card-support">
+      <div class="to-card-support-data">
+        @if (task.category_id) {
+          <span class="to-card-support-data-category">{{
+            task.category_id
+          }}</span>
+        }
+        <span class="to-card-support-data-due to-subtext"
+          >Deadline:
+          {{
+            task.completion_date ? task.completion_date : "not provided"
+          }}</span
+        >
+      </div>
+
+      <div class="to-card-support-actions">
+        <button mat-button>Editar</button>
+        <button mat-button>Excluir</button>
+      </div>
+    </div>
+  </mat-card-header>
+</mat-card>

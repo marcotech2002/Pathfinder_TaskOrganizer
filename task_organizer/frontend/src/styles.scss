@@ -1,9 +1,9 @@
-
-// Custom Theming for Angular Material
-// For more information: https://material.angular.dev/guide/theming
+// src/styles.scss
 @use '@angular/material' as mat;
 
 html {
+  color-scheme: light;
+
   @include mat.theme((
     color: (
       theme-type: light,
@@ -13,7 +13,97 @@ html {
     typography: Roboto,
     density: 0,
   ));
-}/* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+  & {
+    --mat-sys-primary: #315caa;
+    --mat-sys-on-primary: #ffffff;
+    --mat-sys-primary-container: #e8edf5;
+    --mat-sys-on-primary-container: #203e70;
+    --mat-sys-surface: #f7f8fa;
+    --mat-sys-on-surface: #202124;
+    --mat-sys-on-surface-variant: #697178;
+    --mat-sys-outline: #aeb5bd;
+
+    --app-secondary: #dae5f3;
+    --app-on-secondary: var(--mat-sys-primary);
+    --app-secondary-container: #D8ECEA;
+    --app-on-secondary-container: #123B3D;
+    --app-background: #edeef0;
+    --app-surface: #ffffff;
+    --app-text: #202124;
+    --app-muted-text: #697178;
+  }
+}
+
+html.dark-theme {
+  color-scheme: dark;
+
+  @include mat.theme((
+    color: (
+      theme-type: dark,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+
+  & {
+    --mat-sys-primary: #a9c7ff;
+    --mat-sys-on-primary: #102f60;
+    --mat-sys-primary-container: #244888;
+    --mat-sys-on-primary-container: #e8edf5;
+    --mat-sys-surface: #17191d;
+    --mat-sys-on-surface: #e4e6eb;
+    --mat-sys-on-surface-variant: #c1c6cf;
+    --mat-sys-outline: #858c96;
+
+    --app-secondary: #dbe8fe;
+    --app-on-secondary: #123B3D;
+    --app-secondary-container: #244B4D;
+    --app-on-secondary-container: #D8ECEA;
+    --app-background: #1d1f24;
+    --app-surface: #22252b;
+    --app-text: #e4e6eb;
+    --app-muted-text: #c1c6cf;
+  }
+
+  button.mat-mdc-mini-fab {
+    background-color: var(--app-surface);
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: var(--app-background);
+  color: var(--app-text);
+}
+
+.to-subtext {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 14px
+}
+
+button.to-secondary-button {
+  --mdc-filled-button-container-color: var(--app-secondary);
+  --mdc-filled-button-label-text-color: var(--app-on-secondary);
+}
+
+:root {
+  @include mat.card-overrides((
+    title-text-weight: bold,
+    subtitle-text-weight: normal,
+    subtitle-text-size: 14px,
+    subtitle-text-color: var(--mat-sys-on-surface-variant)
+  ));
+
+  @include mat.paginator-overrides((
+    container-background-color: transparent,
+  ));
+}

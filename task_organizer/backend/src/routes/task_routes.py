@@ -91,10 +91,7 @@ def create_task():
         db_session.commit()
         db_session.refresh(task_model)
 
-        return jsonify({
-            "message": "Task created successfully!",
-            "task_id": task_model.id
-        }), 201
+        return jsonify(task_model), 201
 
     except ValidationError as e:
         return jsonify({
@@ -140,10 +137,7 @@ def update_task(task_id):
         db_session.commit()
         db_session.refresh(task_model)
 
-        return jsonify({
-            "message": "Task updated successfully!",
-            "task": task_model
-        }), 200
+        return jsonify(task_model), 200
 
     except ValidationError as e:
         return jsonify({
