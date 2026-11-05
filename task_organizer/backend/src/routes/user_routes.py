@@ -10,7 +10,7 @@ from src.schemas.user_schemas import LoginRequest, UserCreateRequest
 user_bp = Blueprint("user_bp", __name__)
 
 
-@user_bp.route("/login", methods=['POST'])
+@user_bp.route("/api/login", methods=['POST'])
 def login():
     try:
         payload = request.get_json() or {}
@@ -19,7 +19,9 @@ def login():
         user_model = db_session.scalar(
             select(User).filter_by(username=login_dto.username))
 
-        if not user_model or not user_model.verify_password(login_dto.password):
+        if not user_model or not user_model.verify_password(
+            login_dto.password
+        ):
             return jsonify({"error": "Invalid username or password."}), 401
 
         return jsonify({'message': "Login successful!"}), 200
@@ -39,7 +41,7 @@ def login():
         }), 500
 
 
-@user_bp.route('/users', methods=['POST'])
+@user_bp.route('/api/users', methods=['POST'])
 def create_user():
     try:
         payload = request.get_json() or {}

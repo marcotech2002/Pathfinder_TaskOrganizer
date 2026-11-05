@@ -1,13 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TaskResponseDTO, TaskUpdateDTO } from '../../DTOs/task-dtos'
 import { Observable } from 'rxjs';
+import { TaskCreateDTO, TaskResponseDTO, TaskUpdateDTO } from '../../DTOs/task-dtos';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
-  private baseUrl = '/mock/TASK_MOCK_DATA.json';
+  private baseUrl = 'http://localhost:5000/api/tasks/';
   private httpHeaders = new HttpHeaders({ 'content-type': 'application/json' });
 
   constructor(private httpClient: HttpClient) { }
@@ -18,9 +18,27 @@ export class TaskService {
     });
   }
 
+  getTaskById(id: number): Observable<TaskResponseDTO> {
+    return this.httpClient.get<TaskResponseDTO>(`${this.baseUrl}${id}`, {
+      headers: this.httpHeaders
+    });
+  }
+
+  createTask(task: TaskCreateDTO): Observable<TaskResponseDTO> {
+    return this.httpClient.post<TaskResponseDTO>(this.baseUrl, task, {
+      headers: this.httpHeaders
+    });
+  }
+
   updateTask(id: number, updateTask: TaskUpdateDTO): Observable<TaskResponseDTO> {
-    return this.httpClient.patch(`${this.baseUrl}/${id}`, updateTask, {
+    return this.httpClient.patch<TaskResponseDTO>(`${this.baseUrl}${id}`, updateTask, {
       headers: this.httpHeaders
     })
+  }
+
+  deleteTask(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.baseUrl}${id}`, {
+      headers: this.httpHeaders
+    });
   }
 }

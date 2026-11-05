@@ -95,6 +95,10 @@ button.to-secondary-button {
   --mdc-filled-button-label-text-color: var(--app-on-secondary);
 }
 
+.to-form-field {
+  width: 100%;
+}
+
 :root {
   @include mat.card-overrides((
     title-text-weight: bold,

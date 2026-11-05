@@ -24,17 +24,32 @@
             task.category_id
           }}</span>
         }
-        <span class="to-card-support-data-due to-subtext"
-          >Deadline:
-          {{
-            task.completion_date ? task.completion_date : "not provided"
-          }}</span
-        >
+        @if (!task.completion_date) {
+          <span class="to-card-support-data-due to-subtext">
+            Deadline:
+            {{
+              task.due_date
+                ? (task.due_date | date: "MM/dd/yyyy")
+                : "not provided"
+            }}
+          </span>
+        } @else {
+          <span class="to-card-support-data-due to-subtext">
+            Completed on:
+            {{
+              task.completion_date
+                ? (task.completion_date | date: "MM/dd/yyyy")
+                : "not provided"
+            }}
+          </span>
+        }
       </div>
 
       <div class="to-card-support-actions">
-        <button mat-button>Editar</button>
-        <button mat-button>Excluir</button>
+        <button mat-button [routerLink]="['/tasks/form', task.id]">
+          Editar
+        </button>
+        <button mat-button (click)="deleted.emit()">Excluir</button>
       </div>
     </div>
   </mat-card-header>

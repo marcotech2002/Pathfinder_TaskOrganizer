@@ -1,0 +1,34 @@
+.to-filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.to-list-control {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.to-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 4rem 0;
+  gap: 0.5rem;
+
+  mat-icon {
+    width: 5rem;
+    height: 5rem;
+    font-size: 5rem;
+    color: var(--mat-sys-primary);
+  }
+
+  h2, p {
+    margin: 0;
+    font-weight: normal;
+  }
+}

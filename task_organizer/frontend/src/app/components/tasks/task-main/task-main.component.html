@@ -1,0 +1,99 @@
+<app-list-header></app-list-header>
+<br />
+@if (tasks.length > 0) {
+  <div class="to-filters">
+    <button
+      mat-flat-button
+      [class.to-secondary-button]="statusFilter !== 'all'"
+      [attr.aria-pressed]="statusFilter === 'all'"
+      (click)="setStatusFilter('all')"
+    >
+      All
+    </button>
+
+    <button
+      mat-flat-button
+      [class.to-secondary-button]="statusFilter !== 'pending'"
+      [attr.aria-pressed]="statusFilter === 'pending'"
+      (click)="setStatusFilter('pending')"
+    >
+      To do
+    </button>
+
+    <button
+      mat-flat-button
+      [class.to-secondary-button]="statusFilter !== 'completed'"
+      [attr.aria-pressed]="statusFilter === 'completed'"
+      (click)="setStatusFilter('completed')"
+    >
+      Completed
+    </button>
+
+    <button
+      mat-flat-button
+      [class.to-secondary-button]="selectedCategoryId === null"
+      [matMenuTriggerFor]="categories"
+    >
+      {{
+        selectedCategoryId === null
+          ? "Categories"
+          : "Category #" + selectedCategoryId
+      }}
+      <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
+    </button>
+  </div>
+
+  <br />
+}
+<div>
+  @if (pagedTasks.length === 0) {
+    <div class="to-empty-state">
+      <mat-icon>layers_clear</mat-icon>
+      <h2>No tasks here</h2>
+      <p class="to-subtext">
+        You have no tasks in this list. Add a task to get started!
+      </p>
+    </div>
+  } @else {
+    @for (task of pagedTasks; track $index; let l = $last) {
+      <app-task-card
+        [taskSignal]="task"
+        (statusChange)="onStatusChange(task.id!, $event)"
+        (deleted)="onTaskDeleted(task.id!)"
+      ></app-task-card>
+      @if (!l) {
+        <br />
+      }
+    }
+  }
+</div>
+<br />
+@if (pagedTasks.length > 0) {
+  <div class="to-list-control">
+    <span class="to-subtext">{{ listInfo }}</span>
+    @if (filteredTasks.length > pageSize) {
+      <mat-paginator
+        [length]="filteredTasks.length"
+        [pageIndex]="pageIndex"
+        [pageSize]="pageSize"
+        [hidePageSize]="true"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)"
+        aria-label="Select page"
+      >
+      </mat-paginator>
+    }
+  </div>
+}
+
+<mat-menu #categories="matMenu">
+  <button mat-menu-item (click)="setCategoryFilter(null)">
+    All categories
+  </button>
+
+  <!-- @for (categoryId of categoryIds; track categoryId) {
+    <button mat-menu-item (click)="setCategoryFilter(categoryId)">
+      Category #{{ categoryId }}
+    </button>
+  } -->
+</mat-menu>

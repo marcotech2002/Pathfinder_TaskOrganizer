@@ -9,7 +9,7 @@ from src.schemas.category_schemas import (
 )
 
 
-category_bp = Blueprint('category_bp', __name__, url_prefix='/categories')
+category_bp = Blueprint('category_bp', __name__, url_prefix='/api/categories')
 
 
 @category_bp.route('/', methods=['GET'])

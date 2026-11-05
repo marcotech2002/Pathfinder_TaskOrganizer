@@ -1,10 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-list-header',
-  imports: [MatButtonModule],
+  imports: [MatButtonModule, RouterLink],
   templateUrl: './list-header.component.html',
   styleUrl: './list-header.component.scss'
 })

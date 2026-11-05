@@ -1,27 +1,27 @@
-export class TaskCreateDTO {
-  title?: string
-  description?: string
-  due_date?: Date
-  category_id?: number
+export interface TaskCreateDTO {
+  title: string
+  description: string
+  due_date: Date | null
+  category_id: number | null
 }
 
-export class TaskUpdateDTO {
+export interface TaskUpdateDTO {
   title?: string
   description?: string
   completed?: boolean
-  due_date?: Date
-  completion_date?: Date
-  category_id?: number
+  due_date?: Date | null
+  completion_date?: Date | null
+  category_id?: number | null
 }
 
-export class TaskResponseDTO {
-  id?: number
-  title?: string
-  description?: string
-  completed?: boolean
-  due_date?: Date
-  completion_date?: Date
-  category_id?: number
-  creation_date?: Date
-  update_date?: Date
+export interface TaskResponseDTO {
+  id: number
+  title: string
+  description: string
+  completed: boolean
+  due_date: Date | null
+  completion_date: Date | null
+  category_id: number | null
+  creation_date: Date
+  update_date: Date
 }

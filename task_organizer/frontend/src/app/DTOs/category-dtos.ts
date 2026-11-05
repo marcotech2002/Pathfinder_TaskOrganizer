@@ -1,12 +1,12 @@
-class CategoryCreateDTO {
-  name?: string
+export interface CategoryCreateDTO {
+  name: string
 }
 
-class CategoryUpdateDTO {
-  name?: string
+export interface CategoryUpdateDTO {
+  name: string
 }
 
-class CategoryResponseDTO {
-  id?: number
-  name?: string
+export interface CategoryResponseDTO {
+  id: number
+  name: string
 }

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, request, jsonify
 from pydantic import ValidationError
 from sqlalchemy import select
@@ -8,7 +10,7 @@ from src.schemas.task_schemas import (
     TaskCreateRequest, TaskResponse, TaskUpdateRequest
 )
 
-task_bp = Blueprint("task_bp", __name__, url_prefix='/tasks')
+task_bp = Blueprint("task_bp", __name__, url_prefix='/api/tasks')
 
 
 @task_bp.route("/", methods=['GET'])
@@ -91,7 +93,8 @@ def create_task():
         db_session.commit()
         db_session.refresh(task_model)
 
-        return jsonify(task_model), 201
+        task_response = TaskResponse.model_validate(task_model)
+        return jsonify(task_response.model_dump(mode="json")), 201
 
     except ValidationError as e:
         return jsonify({
@@ -129,6 +132,11 @@ def update_task(task_id):
         payload = request.get_json() or {}
         task_dto = TaskUpdateRequest.model_validate(payload)
 
+        if task_dto.completed:
+            task_model.completion_date = datetime.now()
+        else:
+            task_model.completion_date = None
+
         update_data = task_dto.model_dump(exclude_unset=True)
 
         for key, value in update_data.items():
@@ -137,7 +145,8 @@ def update_task(task_id):
         db_session.commit()
         db_session.refresh(task_model)
 
-        return jsonify(task_model), 200
+        task_response = TaskResponse.model_validate(task_model)
+        return jsonify(task_response.model_dump(mode="json")), 200
 
     except ValidationError as e:
         return jsonify({
