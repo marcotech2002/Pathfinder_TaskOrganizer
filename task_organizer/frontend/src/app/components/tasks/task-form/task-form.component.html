@@ -59,7 +59,7 @@
             <mat-label>Category</mat-label>
             <mat-select formControlName="categoryId">
               <mat-option [value]="null">None</mat-option>
-              @for (category of categories(); track category.id) {
+              @for (category of categories; track category.id) {
                 <mat-option [value]="category.id">
                   {{ category.name }}
                 </mat-option>

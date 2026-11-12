@@ -17,6 +17,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { TaskService } from '../../../services/task/task.service';
 import { TaskCreateDTO } from '../../../DTOs/task-dtos';
 import { Router, RouterLink } from '@angular/router';
+import { CategoryResponseDTO } from '../../../DTOs/category-dtos';
+import { CategoryService } from '../../../services/category/category.service';
 
 export interface CategoryOption {
   id: number;
@@ -57,7 +59,7 @@ export interface TaskFormSubmit {
 })
 export class TaskFormComponent implements OnInit {
   id = input<number | undefined>();
-  categories = input<CategoryOption[]>([]);
+  categories: CategoryResponseDTO[] = [];
   form = new FormGroup({
     title: new FormControl('', {
       nonNullable: true,
@@ -78,6 +80,7 @@ export class TaskFormComponent implements OnInit {
 
   constructor(
     private taskService: TaskService,
+    private categoryService: CategoryService,
     private router: Router,
   ) { }
 
@@ -99,6 +102,15 @@ export class TaskFormComponent implements OnInit {
         }
       });
     }
+
+    this.categoryService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (error) => {
+        console.error('Error fetching categories:', error);
+      }
+    });
   }
 
   submitForm(): void {

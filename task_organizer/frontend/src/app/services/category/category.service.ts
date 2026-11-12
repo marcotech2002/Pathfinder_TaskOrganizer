@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CategoryCreateDTO, CategoryResponseDTO } from '../../DTOs/category-dtos';
 
 @Injectable({
   providedIn: 'root'

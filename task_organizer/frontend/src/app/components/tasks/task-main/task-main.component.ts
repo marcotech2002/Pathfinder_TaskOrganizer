@@ -3,21 +3,23 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { ListHeaderComponent } from '../../list-header/list-header.component';
 import { TaskCardComponent } from '../task-card/task-card.component';
 import { TaskResponseDTO } from '../../../DTOs/task-dtos';
 import { TaskService } from '../../../services/task/task.service';
+import { CategoryService } from '../../../services/category/category.service';
+import { CategoryResponseDTO } from '../../../DTOs/category-dtos';
+import { RouterLink } from '@angular/router';
 
 type StatusFilter = 'all' | 'pending' | 'completed';
 
 @Component({
   selector: 'app-task-main',
   imports: [
+    RouterLink,
     MatButtonModule,
     MatMenuModule,
     MatIconModule,
     MatPaginatorModule,
-    ListHeaderComponent,
     TaskCardComponent
   ],
   templateUrl: './task-main.component.html',
@@ -25,6 +27,7 @@ type StatusFilter = 'all' | 'pending' | 'completed';
 })
 export class TaskMainComponent {
   tasks: TaskResponseDTO[] = [];
+  categories: CategoryResponseDTO[] = [];
 
   statusFilter: StatusFilter = 'all';
   selectedCategoryId: number | null = null;
@@ -34,6 +37,7 @@ export class TaskMainComponent {
 
   constructor(
     private taskService: TaskService,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit() {
@@ -43,6 +47,16 @@ export class TaskMainComponent {
       },
       error: (error) => {
         const message = `Error during task listing`;
+        console.log(message);
+      }
+    });
+
+    this.categoryService.getCategories().subscribe({
+      next: res => {
+        this.categories = res;
+      },
+      error: (error) => {
+        const message = `Error during category listing`;
         console.log(message);
       }
     });

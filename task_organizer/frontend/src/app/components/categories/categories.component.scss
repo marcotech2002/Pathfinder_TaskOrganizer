@@ -1,0 +1,121 @@
+.to-category-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 1.5rem;
+  width: 100%;
+
+  .to-category-item-content {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    min-width: 0;
+  }
+
+  .to-category-item-content-wrapper {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    padding-left: 1rem;
+    min-width: 0;
+  }
+
+  .to-category-item-content-wrapper-name {
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+  }
+
+  .to-category-item-content-wrapper mat-form-field {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .to-category-item-actions {
+    display: flex;
+    align-items: center;
+    justify-self: end;
+    white-space: nowrap;
+  }
+
+  .to-subtext {
+    padding-right: 0.5rem;
+  }
+}
+
+.to-modern-color-picker {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  position: relative;
+
+  .to-color-swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+    flex-shrink: 0;
+    transition: 0.2s ease;
+  }
+
+  .to-color-swatch:hover {
+    transform: scale(1.1);
+  }
+}
+
+@media (max-width: 600px) {
+  .to-category-item {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.5rem;
+  }
+
+  .to-category-item-actions {
+    justify-self: start;
+    flex-wrap: wrap;
+  }
+}
+
+::ng-deep .mat-mdc-list-item,
+::ng-deep .mdc-list-item__content,
+::ng-deep .mat-mdc-list-item-unscoped-content {
+  overflow: visible !important;
+}
+
+::ng-deep .color-picker {
+  background-color: var(--app-background) !important;
+
+  input {
+    background-color: var(--app-surface) !important;
+    color: var(--app-text) !important;
+  }
+}
+
+::ng-deep .mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+
+  .mat-mdc-text-field-wrapper {
+    min-height: 32px !important;
+    height: 32px !important;
+    padding: 0 8px !important;
+  }
+
+  .mat-mdc-form-field-infix {
+    min-height: 32px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    display: flex;
+    align-items: center;
+  }
+
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    top: 0 !important;
+  }
+}

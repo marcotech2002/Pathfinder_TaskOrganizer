@@ -25,7 +25,7 @@
           }}</span>
         }
         @if (!task.completion_date) {
-          <span class="to-card-support-data-due to-subtext">
+          <span class="to-subtext">
             Deadline:
             {{
               task.due_date
@@ -34,7 +34,7 @@
             }}
           </span>
         } @else {
-          <span class="to-card-support-data-due to-subtext">
+          <span class="to-subtext">
             Completed on:
             {{
               task.completion_date
@@ -45,11 +45,11 @@
         }
       </div>
 
-      <div class="to-card-support-actions">
+      <div>
         <button mat-button [routerLink]="['/tasks/form', task.id]">
-          Editar
+          edit
         </button>
-        <button mat-button (click)="deleted.emit()">Excluir</button>
+        <button mat-button (click)="deleted.emit()">delete</button>
       </div>
     </div>
   </mat-card-header>

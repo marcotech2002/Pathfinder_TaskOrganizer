@@ -1,4 +1,16 @@
-<app-list-header></app-list-header>
+<div class="to-header-container">
+  <h1 class="to-title">My Tasks</h1>
+  <p class="to-sub-title to-subtext">Organize your tasks by category and deadline.</p>
+  <button
+    class="to-add-button"
+    mat-flat-button
+    [routerLink]="['form']"
+    routerLinkActive="router-link-active"
+  >
+    + New task
+  </button>
+</div>
+
 <br />
 @if (tasks.length > 0) {
   <div class="to-filters">
@@ -32,7 +44,7 @@
     <button
       mat-flat-button
       [class.to-secondary-button]="selectedCategoryId === null"
-      [matMenuTriggerFor]="categories"
+      [matMenuTriggerFor]="categoryMenu"
     >
       {{
         selectedCategoryId === null
@@ -86,14 +98,14 @@
   </div>
 }
 
-<mat-menu #categories="matMenu">
+<mat-menu #categoryMenu="matMenu">
   <button mat-menu-item (click)="setCategoryFilter(null)">
-    All categories
+    None
   </button>
 
-  <!-- @for (categoryId of categoryIds; track categoryId) {
-    <button mat-menu-item (click)="setCategoryFilter(categoryId)">
-      Category #{{ categoryId }}
+  @for (category of categories; track category.id) {
+    <button mat-menu-item (click)="setCategoryFilter(category.id)">
+      {{ category.name }}
     </button>
-  } -->
+  }
 </mat-menu>
