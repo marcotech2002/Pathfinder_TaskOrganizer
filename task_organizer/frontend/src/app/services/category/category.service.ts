@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CategoryCreateDTO, CategoryResponseDTO } from '../../DTOs/category-dtos';
+import { CategoryCreateDTO, CategoryResponseDTO, CategoryUpdateDTO } from '../../DTOs/category-dtos';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,20 @@ export class CategoryService {
 
   createCategory(category: CategoryCreateDTO): Observable<CategoryResponseDTO> {
     return this.httpClient.post<CategoryResponseDTO>(this.baseUrl, category, {
+      headers: this.httpHeaders
+    });
+  }
+
+  updateCategory(categoryId: number, category: CategoryUpdateDTO): Observable<CategoryResponseDTO> {
+    const url = `${this.baseUrl}${categoryId}`;
+    return this.httpClient.patch<CategoryResponseDTO>(url, category, {
+      headers: this.httpHeaders
+    });
+  }
+
+  deleteCategory(categoryId: number): Observable<void> {
+    const url = `${this.baseUrl}${categoryId}`;
+    return this.httpClient.delete<void>(url, {
       headers: this.httpHeaders
     });
   }

@@ -39,7 +39,9 @@ def create_app():
 
     from .routes.task_routes import task_bp
     from .routes.user_routes import user_bp
+    from .routes.category_routes import category_bp
     app.register_blueprint(task_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(category_bp)
 
     return app

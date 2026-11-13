@@ -5,102 +5,159 @@
     class="to-add-button"
     mat-flat-button
     routerLinkActive="router-link-active"
+    (click)="isAddingCategory = true"
   >
     + New category
   </button>
 </div>
 
 <br />
-<mat-card appearance="outlined">
-  <mat-card-content>
-    <mat-list role="list">
-      @for (
-        category of categories;
-        track category.object.name;
-        let last = $last
-      ) {
-        <mat-list-item>
-          <div class="to-category-item">
-            <div class="to-category-item-content">
-              <div
-                class="to-modern-color-picker"
-                [(colorPicker)]="category.object.color"
-                [cpPosition]="'bottom'"
-                [cpOutputFormat]="'hex'"
-                role="button"
-                tabindex="0"
-                aria-label="Selecionar cor da categoria"
-              >
-                <span
-                  class="to-color-swatch"
-                  [style.background-color]="category.object.color"
-                ></span>
-              </div>
 
-              <div class="to-category-item-content-wrapper">
-                @if (!category.isEditing) {
+@if (categories.length === 0 && !isAddingCategory) {
+  <div class="to-empty-state">
+    <mat-icon>layers_clear</mat-icon>
+    <h2>No categories here</h2>
+    <p class="to-subtext">
+      You have no categories. Add a category to get started!
+    </p>
+  </div>
+} @else {
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <mat-list role="list">
+        @for (
+          category of categories;
+          track category.object.name;
+          let last = $last
+        ) {
+          <mat-list-item>
+            <div class="to-category-item">
+              <div class="to-category-item-content">
+                <div
+                  class="to-modern-color-picker"
+                  [(colorPicker)]="category.object.color"
+                  [cpPosition]="'bottom'"
+                  [cpOutputFormat]="'hex'"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Selecionar cor da categoria"
+                >
                   <span
-                    class="to-category-item-content-wrapper-name"
-                    (click)="startEditing(category)"
+                    class="to-color-swatch"
+                    [style.background-color]="category.object.color"
+                  ></span>
+                </div>
+
+                <div class="to-category-item-content-wrapper">
+                  @if (!category.isEditing) {
+                    <span
+                      class="to-category-item-content-wrapper-name"
+                      (click)="startEditing(category)"
+                    >
+                      {{ category.object.name }}
+                    </span>
+                  } @else {
+                    <mat-form-field
+                      appearance="outline"
+                      subscriptSizing="dynamic"
+                    >
+                      <input
+                        matInput
+                        #nameInput
+                        type="text"
+                        class="to-category-item-content-wrapper-input"
+                        [(ngModel)]="category.tempName"
+                        (blur)="saveCategoryName(category)"
+                        (keydown.enter)="saveCategoryName(category)"
+                        (keydown.escape)="cancelEditing(category)"
+                        autofocus
+                      />
+                    </mat-form-field>
+                  }
+                </div>
+              </div>
+              <div class="to-category-item-actions">
+                @if (category.object.task_count > 0) {
+                  <span class="to-subtext"
+                    >{{ category.object.task_count }} tasks</span
                   >
-                    {{ category.object.name }}
-                  </span>
                 } @else {
+                  <span class="to-subtext">No tasks</span>
+                }
+                <button
+                  mat-button
+                  aria-label="Delete category"
+                  (click)="deleteCategory(category.object.id)"
+                >
+                  delete
+                </button>
+              </div>
+            </div>
+          </mat-list-item>
+          @if (!last || isAddingCategory) {
+            <br />
+            <mat-divider></mat-divider>
+            <br />
+          }
+        }
+
+        @if (isAddingCategory) {
+          <mat-list-item>
+            <div class="to-category-item">
+              <div class="to-category-item-content">
+                <div
+                  class="to-modern-color-picker"
+                  [(colorPicker)]="newCategoryColor"
+                  [cpPosition]="'bottom'"
+                  [cpOutputFormat]="'hex'"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Selecionar cor da categoria"
+                >
+                  <span
+                    class="to-color-swatch"
+                    [style.background-color]="newCategoryColor"
+                  ></span>
+                </div>
+                <div class="to-category-item-content-wrapper">
                   <mat-form-field
                     appearance="outline"
                     subscriptSizing="dynamic"
                   >
+                    <mat-label>Category name</mat-label>
                     <input
                       matInput
-                      #nameInput
+                      #newCategoryInput
                       type="text"
                       class="to-category-item-content-wrapper-input"
-                      [(ngModel)]="category.tempName"
-                      (blur)="saveCategoryName(category)"
-                      (keydown.enter)="saveCategoryName(category)"
-                      (keydown.escape)="cancelEditing(category)"
+                      [(ngModel)]="newCategoryName"
+                      (keydown.escape)="cancelAddingCategory()"
                       autofocus
                     />
                   </mat-form-field>
-                }
+                </div>
+              </div>
+              <div class="to-category-item-actions">
+                <button
+                  mat-flat-button
+                  (click)="addCategory()"
+                  aria-label="Add category"
+                  class="to-category-item-actions-add"
+                >
+                  add
+                </button>
+                <button
+                  mat-flat-button
+                  (click)="cancelAddingCategory()"
+                  aria-label="Cancel adding category"
+                >
+                  cancel
+                </button>
               </div>
             </div>
-            <div class="to-category-item-actions">
-              @if (category.taskCount > 0) {
-                <span class="to-subtext">{{ category.taskCount }} tasks</span>
-              } @else {
-                <span class="to-subtext">No tasks</span>
-              }
-              <button mat-button aria-label="Delete category">delete</button>
-            </div>
-          </div>
-        </mat-list-item>
-        @if (!last) {
-          <mat-divider></mat-divider>
+          </mat-list-item>
         }
-      }
-
-      @if (isAddingCategory) {
-        <mat-list-item>
-          <div class="to-category-item">
-            <div class="to-category-item-content">
-              <mat-form-field appearance="outline" subscriptSizing="dynamic">
-                <input
-                  matInput
-                  #newCategoryInput
-                  type="text"
-                  class="to-category-item-content-wrapper-input"
-                  [(ngModel)]="newCategoryName"
-                  (blur)="addCategory()"
-                  (keydown.enter)="addCategory()"
-                  (keydown.escape)="cancelAddingCategory()"
-                  autofocus
-                />
-              </mat-form-field>
-            </div>
-          </div>
-        </mat-list-item>
-      }
-    </mat-list>
-  </mat-card-content>
-</mat-card>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+}

@@ -7,15 +7,15 @@ import { MatListModule } from '@angular/material/list';
 import { ColorPickerDirective } from 'ngx-color-picker';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { CategoryService } from '../../services/category/category.service';
+import { CategoryCreateDTO, CategoryResponseDTO } from '../../DTOs/category-dtos';
+import { finalize } from 'rxjs';
 
 export interface Category {
   isEditing: boolean;
-  object: {
-    name: string;
-    color: string;
-  }
+  object: CategoryResponseDTO;
   tempName?: string;
-  taskCount: number;
+  tempColor?: string
 }
 
 @Component({
@@ -34,45 +34,50 @@ export interface Category {
   styleUrl: './categories.component.scss'
 })
 export class CategoriesComponent {
-  categories: Category[] = [
-    {
-      isEditing: false, object: { name: 'Work', color: '#FF5733' },
-      taskCount: 5
-    },
-    {
-      isEditing: false, object: { name: 'Personal', color: '#33FF57' },
-      taskCount: 0
-    },
-    {
-      isEditing: false, object: { name: 'Shopping', color: '#5733FF' },
-      taskCount: 3
-    },
-    {
-      isEditing: false, object: { name: 'Fitness', color: '#FF33A1' },
-      taskCount: 2
-    },
-    {
-      isEditing: false, object: { name: 'Travel', color: '#33FFF6' },
-      taskCount: 0
-    }
-  ];
+  categories: Category[] = [];
   newCategoryName: string = '';
+  newCategoryColor: string = '#FFFFFF';
   isAddingCategory: boolean = false;
+
+  constructor(private categoryService: CategoryService) { }
+
+  ngOnInit(): void {
+    this.categoryService.getCategories().subscribe(
+      (response) => {
+        this.categories = response.map((category) => ({
+          isEditing: false,
+          object: category
+        }));
+      }
+    );
+  }
 
   startEditing(category: any): void {
     category.isEditing = true;
     category.tempName = category.object.name;
+    category.tempColor = category.object.color;
   }
 
   saveCategoryName(category: any): void {
     if (!category.isEditing) return;
 
-    if (category.tempName && category.tempName.trim() !== '') {
+    if (
+      category.tempName && category.tempName.trim() !== '' &&
+      (category.tempName !== category.object.name || category.tempColor !== category.object.color)
+    ) {
       category.object.name = category.tempName.trim();
-      // TODO: Chamar seu serviço para persistir no backend se necessário
-      // this.categoryService.update(category).subscribe();
+      this.categoryService.updateCategory(category.object.id, { name: category.object.name, color: category.object.color }).subscribe({
+        next: (updatedCategory) => {
+          category.object = updatedCategory;
+        },
+        error: (error) => {
+          console.error('Error updating category:', error);
+          category.tempName = category.object.name;
+        }
+      });
     } else {
       category.tempName = category.object.name;
+      category.tempColor = category.object.color;
     }
 
     category.isEditing = false;
@@ -83,10 +88,43 @@ export class CategoriesComponent {
     category.isEditing = false;
   }
 
-  addCategory(): void {}
+  addCategory(): void {
+    if (this.newCategoryName.trim() !== '') {
+      const newCategory: CategoryCreateDTO = {
+        name: this.newCategoryName.trim(),
+        color: this.newCategoryColor
+      };
+
+      this.categoryService.createCategory(newCategory).pipe(
+        finalize(() => this.cancelAddingCategory())
+      ).subscribe({
+        next: (createdCategory) => {
+          this.categories.push({
+            isEditing: false,
+            object: createdCategory
+          });
+        },
+        error: (error) => {
+          console.error('Error creating category:', error);
+        }
+      });
+    }
+  }
 
   cancelAddingCategory(): void {
     this.isAddingCategory = false;
     this.newCategoryName = '';
+    this.newCategoryColor = '#FFFFFF';
+  }
+
+  deleteCategory(id: number): void {
+    this.categoryService.deleteCategory(id).subscribe({
+      next: () => {
+        this.categories = this.categories.filter(category => category.object.id !== id)
+      },
+      error: () => {
+        console.log("A error ocurred while deleting the category")
+      }
+    })
   }
 }

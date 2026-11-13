@@ -92,7 +92,7 @@ export class TaskFormComponent implements OnInit {
             title: task.title,
             description: task.description,
             dueDate: task.due_date,
-            categoryId: task.category_id,
+            categoryId: task.category?.id,
             completed: task.completed,
             completionDate: task.completion_date
           });

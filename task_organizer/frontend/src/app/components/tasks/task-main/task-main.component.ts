@@ -71,7 +71,7 @@ export class TaskMainComponent {
 
       const matchesCategory =
         this.selectedCategoryId === null ||
-        task.category_id === this.selectedCategoryId;
+        task.category?.id === this.selectedCategoryId;
 
       return matchesStatus && matchesCategory;
     });

@@ -8,6 +8,8 @@ class Category(BaseModel):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(150), nullable=False)
+    color: Mapped[str] = mapped_column(
+        String(7), nullable=False, default="#FFFFFF")
 
     tasks: Mapped[list["Task"]] = relationship(
         back_populates="category",
@@ -18,4 +20,7 @@ class Category(BaseModel):
     user: Mapped["User"] = relationship(back_populates="categories")
 
     def __str__(self) -> str:
-        return f"Category -> id: {self.id}, name: {self.name}"
+        return (
+            f"Category -> id: {self.id}, name: {self.name}, " +
+            f"color: {self.color}"
+        )

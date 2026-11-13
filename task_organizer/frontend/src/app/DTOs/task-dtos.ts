@@ -1,3 +1,5 @@
+import { CategoryResponseDTO } from "./category-dtos"
+
 export interface TaskCreateDTO {
   title: string
   description: string
@@ -21,7 +23,7 @@ export interface TaskResponseDTO {
   completed: boolean
   due_date: Date | null
   completion_date: Date | null
-  category_id: number | null
+  category: CategoryResponseDTO | null
   creation_date: Date
   update_date: Date
 }

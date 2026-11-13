@@ -19,10 +19,13 @@
 
     <div class="to-card-support">
       <div class="to-card-support-data">
-        @if (task.category_id) {
-          <span class="to-card-support-data-category">{{
-            task.category_id
-          }}</span>
+        @if (task.category) {
+          <span
+            class="to-card-support-data-category"
+            [style.background-color]="task.category.color"
+            [style.color]="getContrastColor(task.category.color)"
+            >{{ task.category.name }}</span
+          >
         }
         @if (!task.completion_date) {
           <span class="to-subtext">
@@ -46,9 +49,7 @@
       </div>
 
       <div>
-        <button mat-button [routerLink]="['/tasks/form', task.id]">
-          edit
-        </button>
+        <button mat-button [routerLink]="['/tasks/form', task.id]">edit</button>
         <button mat-button (click)="deleted.emit()">delete</button>
       </div>
     </div>

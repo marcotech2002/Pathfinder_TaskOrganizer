@@ -3,6 +3,8 @@ from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
+from .category_schemas import TaskCategoryResponse
+
 
 class TaskCreateRequest(BaseModel):
     """
@@ -38,6 +40,6 @@ class TaskResponse(BaseModel):
     update_date: datetime
     due_date: Optional[datetime] = None
     completion_date: Optional[datetime] = None
-    category_id: Optional[int] = None
+    category: Optional[TaskCategoryResponse] = None
 
     model_config = ConfigDict(from_attributes=True)
