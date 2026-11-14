@@ -124,6 +124,11 @@ button.to-secondary-button {
   }
 }
 
+.to-spinner {
+  display: flex;
+  justify-content: center;
+  padding-top: 5rem;
+}
 
 :root {
   @include mat.card-overrides((
@@ -135,5 +140,10 @@ button.to-secondary-button {
 
   @include mat.paginator-overrides((
     container-background-color: transparent,
+  ));
+
+  @include mat.snack-bar-overrides((
+    container-color: var(--mat-sys-surface),
+    supporting-text-color: var(--mat-sys-on-surface)
   ));
 }

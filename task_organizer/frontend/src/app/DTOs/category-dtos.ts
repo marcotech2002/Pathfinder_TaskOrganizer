@@ -12,5 +12,5 @@ export interface CategoryResponseDTO {
   id: number
   name: string
   color: string
-  task_count: number
+  tasks_count: number
 }

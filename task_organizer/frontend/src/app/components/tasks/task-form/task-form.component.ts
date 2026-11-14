@@ -15,10 +15,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { TaskService } from '../../../services/task/task.service';
-import { TaskCreateDTO } from '../../../DTOs/task-dtos';
+import { TaskCreateDTO, TaskResponseDTO } from '../../../DTOs/task-dtos';
 import { Router, RouterLink } from '@angular/router';
 import { CategoryResponseDTO } from '../../../DTOs/category-dtos';
 import { CategoryService } from '../../../services/category/category.service';
+import { SnackBarService } from '../../../services/common/snack-bar.service';
+import { DatePipe } from '@angular/common';
 
 export interface CategoryOption {
   id: number;
@@ -53,6 +55,7 @@ export interface TaskFormSubmit {
     MatNativeDateModule,
     MatSelectModule,
     MatIconModule,
+    DatePipe
   ],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.scss',
@@ -77,11 +80,13 @@ export class TaskFormComponent implements OnInit {
       disabled: true,
     }),
   });
+  task: TaskResponseDTO | undefined
 
   constructor(
     private taskService: TaskService,
     private categoryService: CategoryService,
     private router: Router,
+    private snackBarService: SnackBarService
   ) { }
 
   ngOnInit(): void {
@@ -96,9 +101,11 @@ export class TaskFormComponent implements OnInit {
             completed: task.completed,
             completionDate: task.completion_date
           });
+          this.task = task
         },
-        error: (error) => {
-          console.error('Error fetching task:', error);
+        error: () => {
+          const message = 'Error fetching task';
+          this.snackBarService.openSnackBar(message);
         }
       });
     }
@@ -107,10 +114,22 @@ export class TaskFormComponent implements OnInit {
       next: (categories) => {
         this.categories = categories;
       },
-      error: (error) => {
-        console.error('Error fetching categories:', error);
+      error: () => {
+        const message = 'Error fetching categories';
+        this.snackBarService.openSnackBar(message);
       }
     });
+  }
+
+  changeCompletionDate(value: boolean): void {
+    if (value) {
+      const today = new Date()
+      this.form.controls.completionDate.enable()
+      this.form.controls.completionDate.setValue(today)
+    } else {
+      this.form.controls.completionDate.disable()
+      this.form.controls.completionDate.setValue(null)
+    }
   }
 
   submitForm(): void {
@@ -129,11 +148,13 @@ export class TaskFormComponent implements OnInit {
         completion_date: this.form.controls.completionDate.value
       }).subscribe({
         next: (res) => {
-          console.log('Task updated successfully:', res);
+          const message = 'Task updated successfully';
+          this.snackBarService.openSnackBar(message);
           this.router.navigate(['/tasks']);
         },
         error: (error) => {
-          console.error('Error updating task:', error);
+          const message = 'Error updating task';
+          this.snackBarService.openSnackBar(message);
         }
       });
     } else {
@@ -146,11 +167,13 @@ export class TaskFormComponent implements OnInit {
 
       this.taskService.createTask(taskDTO).subscribe({
         next: (res) => {
-          console.log('Task created successfully:', res);
+          const message = 'Task created successfully';
+          this.snackBarService.openSnackBar(message);
           this.router.navigate(['/tasks']);
         },
         error: (error) => {
-          console.error('Error creating task:', error);
+          const message = 'Error creating task';
+          this.snackBarService.openSnackBar(message);
         }
       });
     }

@@ -1,15 +1,19 @@
+import { SnackBarService } from './../../services/common/snack-bar.service';
 import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ColorPickerDirective } from 'ngx-color-picker';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { CategoryService } from '../../services/category/category.service';
 import { CategoryCreateDTO, CategoryResponseDTO } from '../../DTOs/category-dtos';
-import { finalize } from 'rxjs';
+import { filter, finalize, of, switchMap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 
 export interface Category {
   isEditing: boolean;
@@ -28,7 +32,8 @@ export interface Category {
     MatListModule,
     MatDividerModule,
     ColorPickerDirective,
-    MatInputModule
+    MatInputModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss'
@@ -38,18 +43,29 @@ export class CategoriesComponent {
   newCategoryName: string = '';
   newCategoryColor: string = '#FFFFFF';
   isAddingCategory: boolean = false;
+  isLoading = true;
 
-  constructor(private categoryService: CategoryService) { }
+  constructor(
+    private categoryService: CategoryService,
+    private snackBarService: SnackBarService,
+    private readonly dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
-    this.categoryService.getCategories().subscribe(
-      (response) => {
+    this.categoryService.getCategories().pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: (response) => {
         this.categories = response.map((category) => ({
           isEditing: false,
           object: category
         }));
+      },
+      error: () => {
+        const message = "Error during categories listing"
+        this.snackBarService.openSnackBar(message);
       }
-    );
+    });
   }
 
   startEditing(category: any): void {
@@ -69,9 +85,12 @@ export class CategoriesComponent {
       this.categoryService.updateCategory(category.object.id, { name: category.object.name, color: category.object.color }).subscribe({
         next: (updatedCategory) => {
           category.object = updatedCategory;
+          const message = "Category updated successfully"
+          this.snackBarService.openSnackBar(message);
         },
-        error: (error) => {
-          console.error('Error updating category:', error);
+        error: () => {
+          const message = 'Error updating category';
+          this.snackBarService.openSnackBar(message);
           category.tempName = category.object.name;
         }
       });
@@ -103,9 +122,12 @@ export class CategoriesComponent {
             isEditing: false,
             object: createdCategory
           });
+          const message = "Category created successfully"
+          this.snackBarService.openSnackBar(message);
         },
-        error: (error) => {
-          console.error('Error creating category:', error);
+        error: () => {
+          const message = 'Error creating category';
+          this.snackBarService.openSnackBar(message);
         }
       });
     }
@@ -117,14 +139,38 @@ export class CategoriesComponent {
     this.newCategoryColor = '#FFFFFF';
   }
 
-  deleteCategory(id: number): void {
-    this.categoryService.deleteCategory(id).subscribe({
-      next: () => {
-        this.categories = this.categories.filter(category => category.object.id !== id)
-      },
-      error: () => {
-        console.log("A error ocurred while deleting the category")
-      }
-    })
+  deleteCategory(category: Category): void {
+    const confirmation$ =
+      category.object.tasks_count > 0
+        ? this.dialog
+          .open(DialogComponent, {
+            width: '350px',
+            data: {
+              title: 'Delete category?',
+              message: `This category has ${category.object.tasks_count} tasks. Continue?`,
+            },
+          })
+          .afterClosed()
+        : of(true);
+
+    confirmation$
+      .pipe(
+        filter((confirmed): confirmed is true => confirmed === true),
+        switchMap(() =>
+          this.categoryService.deleteCategory(category.object.id)
+        )
+      )
+      .subscribe({
+        next: () => {
+          this.categories = this.categories.filter(
+            item => item.object.id !== category.object.id
+          );
+        },
+        error: () => {
+          this.snackBarService.openSnackBar(
+            'Error during category deletion'
+          );
+        },
+      });
   }
 }

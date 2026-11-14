@@ -20,10 +20,10 @@ export class TaskCardComponent {
   taskSignal = input.required<TaskResponseDTO>();
   statusChange = output<boolean>();
   deleted = output<void>();
+  task!: TaskResponseDTO
 
-  get task(): TaskResponseDTO {
-    console.log(this.taskSignal().category)
-    return this.taskSignal()
+  ngOnInit() {
+    this.task = this.taskSignal()
   }
 
   changeTaskStatus() {
